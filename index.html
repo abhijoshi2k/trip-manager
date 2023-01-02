@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Registration</title>
+
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+			crossorigin="anonymous"
+		/>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+			crossorigin="anonymous"
+		></script>
+	</head>
+
+	<body>
+		<div class="container pt-5" id="full-reg">
+			<div class="row">
+				<div class="col-md-6 offset-md-3">
+					<h1>Registration</h1>
+					<h6>Only Worley employees can self-register</h6>
+					<small
+						>Others should approach Worley
+						employee/organizers</small
+					>
+					<div class="mb-4"></div>
+					<form action="index.html" method="POST" id="ver-form">
+						<fieldset id="reg-fieldset">
+							<div class="mb-3">
+								<div class="mb-3">
+									Registration type
+									<span class="text-danger">*</span>
+								</div>
+								<div class="form-check form-check-inline">
+									<input
+										class="form-check-input"
+										type="radio"
+										name="reg_type"
+										value="self"
+										id="reg-self"
+										onchange="regTypeChange(1)"
+										checked
+									/>
+									<label
+										class="form-check-label"
+										for="reg-self"
+									>
+										Self
+									</label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input
+										class="form-check-input"
+										type="radio"
+										name="reg_type"
+										value="other"
+										id="reg-other"
+										onchange="regTypeChange(2)"
+									/>
+									<label
+										class="form-check-label"
+										for="reg-other"
+									>
+										Register for someone else
+									</label>
+								</div>
+							</div>
+
+							<div class="mb-3">
+								<label for="email" class="form-label">
+									Your email address (ending with @worley.com)
+									<span class="text-danger">*</span>
+								</label>
+								<input
+									type="email"
+									class="form-control"
+									id="email"
+									name="email"
+									placeholder="Enter your email"
+									pattern=".*@worley.com"
+									required
+								/>
+							</div>
+
+							<div class="mb-3 d-none" id="passenger-email-outer">
+								<label for="pass_email" class="form-label">
+									Passenger email address
+									<span class="text-danger">*</span>
+								</label>
+								<input
+									type="email"
+									class="form-control"
+									id="pass_email"
+									name="pass_email"
+									placeholder="Enter your email"
+								/>
+							</div>
+
+							<div class="mb-3">
+								<label for="name" class="form-label">
+									Passenger Name
+									<span class="text-danger">*</span>
+								</label>
+								<input
+									type="text"
+									class="form-control"
+									id="name"
+									name="name"
+									placeholder="Enter your name"
+									required
+								/>
+							</div>
+
+							<div class="mb-3">
+								<button
+									type="submit"
+									class="btn btn-primary"
+									id="ver-btn"
+								>
+									Send verification code
+								</button>
+								<div id="email-status">
+									<span class="text-danger">
+										Please verify email address before
+										submitting
+									</span>
+								</div>
+							</div>
+						</fieldset>
+					</form>
+
+					<form action="index.html" method="POST" id="submit-form">
+						<div class="mb-3 d-none" id="ver_code_outer">
+							<label for="ver-code" class="form-label">
+								Verification code
+								<span class="text-danger">*</span>
+							</label>
+							<input
+								type="text"
+								class="form-control"
+								id="ver-code"
+								placeholder="6 digit"
+								required
+							/>
+						</div>
+
+						<div>
+							<button
+								type="submit"
+								class="btn btn-success"
+								id="submit-btn"
+								disabled
+							>
+								Submit
+							</button>
+							<div id="submit-status"></div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div id="success-reg" class="d-none">
+			<div class="text-center">
+				<h5 class="card-title">Registration successful</h5>
+				<p class="card-text">Thank you for registering.</p>
+				<p class="card-text">
+					You will receive a confirmation email with spreadsheet link.
+				</p>
+				<p class="card-text">
+					Please check your spam folder if you do not receive the
+					email.
+				</p>
+				<p>
+					<button class="btn btn-primary" onclick="location.reload()">
+						Go to registration form again
+					</button>
+				</p>
+			</div>
+		</div>
+
+		<script>
+			let scode = null;
+
+			document
+				.getElementById('ver-form')
+				.addEventListener('submit', (e) => {
+					e.preventDefault();
+					requestVerificationCode();
+				});
+
+			document
+				.getElementById('submit-form')
+				.addEventListener('submit', (e) => {
+					e.preventDefault();
+					submitForm();
+				});
+
+			let passengerOuter = document.getElementById(
+				'passenger-email-outer'
+			);
+			let passengerEmail = document.getElementById('pass_email');
+
+			let verBtn = document.getElementById('ver-btn');
+			let verCodeOuter = document.getElementById('ver_code_outer');
+			let verCode = document.getElementById('ver-code');
+
+			let submitBtn = document.getElementById('submit-btn');
+
+			let emailStatus = document.getElementById('email-status');
+			let submitStatus = document.getElementById('submit-status');
+
+			let regFieldset = document.getElementById('reg-fieldset');
+
+			const changeStatus = (element, content, className) => {
+				element.innerHTML =
+					'<span class="' + className + '">' + content + '</span>';
+			};
+
+			let selfReg = true;
+
+			const regTypeChange = (e) => {
+				if (e == 1) {
+					passengerOuter.classList.add('d-none');
+					passengerEmail.required = false;
+					selfReg = true;
+				} else {
+					passengerOuter.classList.remove('d-none');
+					passengerEmail.required = true;
+					selfReg = false;
+				}
+			};
+
+			const requestVerificationCode = () => {
+				regFieldset.disabled = true;
+				changeStatus(
+					emailStatus,
+					'Sending verification code...',
+					'text-danger'
+				);
+
+				let email = document.getElementById('email').value;
+				let name = document.getElementById('name').value;
+				let passEmail = document.getElementById('pass_email').value;
+
+				let data = {
+					email: email,
+					passEmail: selfReg ? email : passEmail,
+					reg_name: selfReg ? 'self' : name + ' (' + passEmail + ')',
+					ex: 'verification'
+				};
+
+				fetch('/api/verify', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(data)
+				})
+					.then((res) => res.json())
+					.then((data) => {
+						if (data.status == 'success') {
+							changeStatus(
+								emailStatus,
+								'Verification code sent to your email (Also check spam)',
+								'text-success'
+							);
+							verCodeOuter.classList.remove('d-none');
+							submitBtn.disabled = false;
+
+							scode = data.code;
+						} else {
+							regFieldset.disabled = false;
+							changeStatus(
+								emailStatus,
+								data.message,
+								'text-danger'
+							);
+						}
+					})
+					.catch((err) => {
+						regFieldset.disabled = false;
+						changeStatus(
+							emailStatus,
+							'Verification code error! Try again.',
+							'text-danger'
+						);
+					});
+			};
+
+			const submitForm = () => {
+				submitBtn.disabled = true;
+				changeStatus(submitStatus, 'Verifying...', 'text-danger');
+
+				if (verCode.value != scode) {
+					changeStatus(
+						submitStatus,
+						'Incorrect verification code!',
+						'text-danger'
+					);
+					submitBtn.disabled = false;
+					return;
+				}
+
+				let email = document.getElementById('email').value;
+				let name = document.getElementById('name').value;
+				let passEmail = selfReg
+					? email
+					: document.getElementById('pass_email').value;
+
+				let data = {
+					email: email,
+					passEmail: passEmail,
+					name: name,
+					reg: selfReg ? '1' : '0',
+					ex: 'registration'
+				};
+
+				fetch('/api/register', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(data)
+				})
+					.then((res) => res.json())
+					.then((data) => {
+						if (data.status == 'success') {
+							document.getElementById('full-reg').remove();
+							document
+								.getElementById('reg-success')
+								.classList.remove('d-none');
+						} else {
+							changeStatus(
+								submitStatus,
+								data.message,
+								'text-danger'
+							);
+							submitBtn.disabled = false;
+						}
+					})
+					.catch((err) => {
+						changeStatus(
+							submitStatus,
+							'Registration error! Try again.',
+							'text-danger'
+						);
+						submitBtn.disabled = false;
+					});
+			};
+		</script>
+	</body>
+</html>
