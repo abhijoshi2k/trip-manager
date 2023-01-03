@@ -308,7 +308,9 @@
 					return;
 				}
 
-				let email = document.getElementById('email').value;
+				let email = selfReg
+					? 'self'
+					: document.getElementById('email').value;
 				let name = document.getElementById('name').value;
 				let passEmail = selfReg
 					? email
@@ -318,7 +320,6 @@
 					email: email,
 					passEmail: passEmail,
 					name: name,
-					reg: selfReg ? '1' : '0',
 					ex: 'registration'
 				};
 
