@@ -197,7 +197,7 @@
 			let scode = null;
 
 			let scLink =
-				'https://script.google.com/macros/s/AKfycbw10XP9oT878oHYjqVqHqrgtfcfFVeVSbZA0XGOAyIpitcsGI14L1_L6rSCSKoWjv2O/exec';
+				'https://script.google.com/macros/s/AKfycbyxliLkDTTzkCqg4cYWb-9KzcE09rjpLe0I59TGGYYS6KmXPM7CJRpho7w2dWNCJ2yu/exec';
 
 			document
 				.getElementById('ver-form')
@@ -325,7 +325,7 @@
 					: document.getElementById('email').value;
 				let name = document.getElementById('name').value;
 				let passEmail = selfReg
-					? email
+					? document.getElementById('email').value
 					: document.getElementById('pass_email').value;
 
 				let data = {
@@ -347,7 +347,7 @@
 						if (data.status == 'success') {
 							document.getElementById('full-reg').remove();
 							document
-								.getElementById('reg-success')
+								.getElementById('success-reg')
 								.classList.remove('d-none');
 						} else {
 							changeStatus(

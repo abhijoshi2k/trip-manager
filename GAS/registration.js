@@ -88,7 +88,8 @@ const registration = (e, ss) => {
 		let html = registrationHTML
 			.replace('{{name}}', e.name)
 			.replace('{{passEmail}}', e.passEmail)
-			.replace('{{status}}', status);
+			.replace('{{status}}', status)
+			.replace('{{uuid}}', uuid);
 
 		const subject = 'Registration Successful';
 		const body = '';
