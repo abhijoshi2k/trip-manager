@@ -8,17 +8,6 @@ const registration = (e, ss) => {
 	try {
 		let sheet = ss.getSheetByName('Active');
 
-		let lr = sheet.getLastRow();
-
-		for (let i = 2; i <= lr; i++) {
-			if (sheet.getRange(i, 5).getValue() === e.passEmail) {
-				return {
-					status: 'error',
-					message: e.passEmail + ' already registered'
-				};
-			}
-		}
-
 		let date = new Date();
 
 		let timestamp = Utilities.formatDate(
@@ -27,7 +16,7 @@ const registration = (e, ss) => {
 			'dd MMMM yyyy, h:mm:ss a'
 		);
 
-		let uuid = date.getTime().toString(36);
+		let uuid = date.getTime().toString(36).toUpperCase();
 
 		let data = [
 			'',
@@ -46,7 +35,7 @@ const registration = (e, ss) => {
 		let found = false;
 		let reqR = 0;
 
-		lr = sheet.getLastRow();
+		let lr = sheet.getLastRow();
 		for (let i = lr; i > 1; i--) {
 			let range = sheet.getRange('C' + i);
 			let val = range.getValue();
@@ -74,14 +63,14 @@ const registration = (e, ss) => {
 
 		let status = 'Confirmed';
 		if (reqR > maxActive + 1) {
-			let sheetWaiting = ss.getSheetByName('Waitlist');
+			let wlSheet = ss.getSheetByName('Waitlist');
 			let range = sheet.getRange(reqR, 2, 1, 8);
 			let values = range.getValues();
 			values[0].unshift('');
-			sheetWaiting.appendRow(values[0]);
+			wlSheet.appendRow(values[0]);
 			sheet.deleteRow(reqR);
 
-			let aplr = sheetWaiting.getLastRow();
+			let aplr = wlSheet.getLastRow();
 			status = 'Waitlist (' + (aplr - 1) + ')';
 		}
 
@@ -109,7 +98,8 @@ const registration = (e, ss) => {
 
 		return {
 			status: 'success',
-			reg: status
+			reg: status,
+			uuid: uuid
 		};
 	} catch (err) {
 		return {

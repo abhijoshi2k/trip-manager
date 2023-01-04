@@ -20,7 +20,7 @@
 	</head>
 
 	<body>
-		<div class="container pt-5" id="full-reg">
+		<div class="container py-5" id="full-reg">
 			<div class="row">
 				<div class="col-md-6 offset-md-3">
 					<h1>Registration</h1>
@@ -174,10 +174,13 @@
 			</div>
 		</div>
 
-		<div id="success-reg" class="d-none">
+		<div id="success-reg" class="d-none py-5">
 			<div class="text-center">
 				<h5 class="card-title">Registration successful</h5>
 				<p class="card-text">Thank you for registering.</p>
+				<p>Registration status: <b id="reg-status"></b></p>
+				<p>Registration ID: <b id="reg-id" class="text-danger"></b></p>
+				<p><b>Save the above ID for future use</b></p>
 				<p class="card-text">
 					You will receive a confirmation email with spreadsheet link.
 				</p>
@@ -197,7 +200,7 @@
 			let scode = null;
 
 			let scLink =
-				'https://script.google.com/macros/s/AKfycbyxliLkDTTzkCqg4cYWb-9KzcE09rjpLe0I59TGGYYS6KmXPM7CJRpho7w2dWNCJ2yu/exec';
+				'https://script.google.com/macros/s/AKfycbx27-VXZ2UhvaGnVf16GvXTQK-wBahi-sUzNtqPCXqBGMUIKpAJ9vc7BpZW6lusWSX7/exec';
 
 			document
 				.getElementById('ver-form')
@@ -288,7 +291,6 @@
 							scode = data.code;
 						} else {
 							regFieldset.disabled = false;
-							console.log(JSON.parse(data.message));
 							changeStatus(
 								emailStatus,
 								data.message,
@@ -309,6 +311,13 @@
 			const submitForm = () => {
 				submitBtn.disabled = true;
 				changeStatus(submitStatus, 'Verifying...', 'text-danger');
+
+				if (
+					document.getElementById('email').value ==
+					document.getElementById('pass_email').value
+				) {
+					selfReg = true;
+				}
 
 				if (verCode.value != scode) {
 					changeStatus(
@@ -349,6 +358,18 @@
 							document
 								.getElementById('success-reg')
 								.classList.remove('d-none');
+							let statusClass = 'text-primary';
+							if (data.reg == 'Confirmed') {
+								statusClass = 'text-success';
+							}
+							document.getElementById('reg-status').innerHTML =
+								'<span class="' +
+								statusClass +
+								'">' +
+								data.reg +
+								'</span>';
+							document.getElementById('reg-id').innerHTML =
+								data.uuid;
 						} else {
 							changeStatus(
 								submitStatus,
