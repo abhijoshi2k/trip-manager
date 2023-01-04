@@ -11,35 +11,31 @@ const registration = (e, ss) => {
 		let lr = sheet.getLastRow();
 
 		for (let i = 2; i <= lr; i++) {
-			if (sheet.getRange(i, 5).getValue() === e.parameter.passEmail) {
+			if (sheet.getRange(i, 5).getValue() === e.passEmail) {
 				return {
 					status: 'error',
-					message: e.parameter.passEmail + ' already registered'
+					message: e.passEmail + ' already registered'
 				};
 			}
 		}
 
-		let timestamp =
-			Utilities.formatDate(date, 'IST', 'dd MMMM yyyy, h:mm:ss a') +
-			' IST';
+		let date = new Date();
 
-		// let range = sheet.getRange('F2:F');
-		// range.setDataValidation(
-		// 	SpreadsheetApp.newDataValidation()
-		// 		.requireValueInList(['Yes', 'No'])
-		// 		.build()
-		// );
-		// range.setValue('No');
+		let timestamp = Utilities.formatDate(
+			date,
+			'IST',
+			'dd MMMM yyyy, h:mm:ss a'
+		);
 
-		let uuid = new Date().getTime().toString(36);
+		let uuid = date.getTime().toString(36);
 
 		let data = [
 			'',
 			timestamp,
 			uuid,
-			e.parameter.name,
-			e.parameter.passEmail,
-			e.parameter.email,
+			e.name,
+			e.passEmail,
+			e.email,
 			'',
 			'No',
 			''
@@ -90,8 +86,8 @@ const registration = (e, ss) => {
 		}
 
 		let html = registrationHTML
-			.replace('{{name}}', e.parameter.name)
-			.replace('{{passEmail}}', e.parameter.passEmail)
+			.replace('{{name}}', e.name)
+			.replace('{{passEmail}}', e.passEmail)
 			.replace('{{status}}', status);
 
 		const subject = 'Registration Successful';
@@ -101,20 +97,24 @@ const registration = (e, ss) => {
 			name: 'Akkalkot trip'
 		};
 
-		let recepient = e.parameter.passEmail;
+		let recepient = e.passEmail;
 
-		if (e.parameter.email !== 'self') {
-			options.cc = e.parameter.passEmail;
-			recepient = e.parameter.email;
+		if (e.email !== 'self') {
+			options.cc = e.passEmail;
+			recepient = e.email;
 		}
 
-		GmailApp.sendEmail(recipient, subject, body, options);
+		GmailApp.sendEmail(recepient, subject, body, options);
 
 		return {
 			status: 'success',
-			status: status
+			reg: status
 		};
 	} catch (err) {
-		return { status: 'error', message: 'Unknown error occurred!' };
+		return {
+			status: 'error',
+			message: 'Unknown error occurred!',
+			error: err
+		};
 	}
 };

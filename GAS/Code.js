@@ -3,18 +3,32 @@ const sheetURL =
 var ss = SpreadsheetApp.openByUrl(sheetURL);
 
 function doPost(e) {
-	const exs = {
-		verification: verification,
-		registration: registration
-	};
+	try {
+		const exs = {
+			verification: verification,
+			registration: registration
+		};
 
-	if (exs[e.parameters.ex]) {
+		e = JSON.parse(e.postData.contents);
+
+		if (exs[e.ex]) {
+			return ContentService.createTextOutput(
+				JSON.stringify(exs[e.ex](e, ss))
+			).setMimeType(ContentService.MimeType.JSON);
+		} else {
+			return ContentService.createTextOutput(
+				JSON.stringify({
+					status: 'error',
+					message: JSON.stringify(e)
+				})
+			).setMimeType(ContentService.MimeType.JSON);
+		}
+	} catch (e) {
 		return ContentService.createTextOutput(
-			JSON.stringify(exs[e.parameters.ex](e, ss))
-		).setMimeType(ContentService.MimeType.JSON);
-	} else {
-		return ContentService.createTextOutput(
-			JSON.stringify({ status: 'Parameter not found' })
+			JSON.stringify({
+				status: 'Error',
+				message: 'Unknown error occurred!'
+			})
 		).setMimeType(ContentService.MimeType.JSON);
 	}
 }

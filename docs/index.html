@@ -77,13 +77,21 @@
 									Your email address (ending with @worley.com)
 									<span class="text-danger">*</span>
 								</label>
-								<input
+								<!-- <input
 									type="email"
 									class="form-control"
 									id="email"
 									name="email"
 									placeholder="Enter your email"
 									pattern=".*@worley.com"
+									required
+								/> -->
+								<input
+									type="email"
+									class="form-control"
+									id="email"
+									name="email"
+									placeholder="Enter your email"
 									required
 								/>
 							</div>
@@ -188,6 +196,9 @@
 		<script>
 			let scode = null;
 
+			let scLink =
+				'https://script.google.com/macros/s/AKfycbw10XP9oT878oHYjqVqHqrgtfcfFVeVSbZA0XGOAyIpitcsGI14L1_L6rSCSKoWjv2O/exec';
+
 			document
 				.getElementById('ver-form')
 				.addEventListener('submit', (e) => {
@@ -256,10 +267,10 @@
 					ex: 'verification'
 				};
 
-				fetch('/api/verify', {
+				fetch(scLink, {
 					method: 'POST',
 					headers: {
-						'Content-Type': 'application/json'
+						'Content-Type': 'application/x-www-form-urlencoded'
 					},
 					body: JSON.stringify(data)
 				})
@@ -277,6 +288,7 @@
 							scode = data.code;
 						} else {
 							regFieldset.disabled = false;
+							console.log(JSON.parse(data.message));
 							changeStatus(
 								emailStatus,
 								data.message,
@@ -323,10 +335,10 @@
 					ex: 'registration'
 				};
 
-				fetch('/api/register', {
+				fetch(scLink, {
 					method: 'POST',
 					headers: {
-						'Content-Type': 'application/json'
+						'Content-Type': 'application/x-www-form-urlencoded'
 					},
 					body: JSON.stringify(data)
 				})

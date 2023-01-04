@@ -1,6 +1,6 @@
 const verification = (e, ss) => {
 	try {
-		const { email, name } = e.parameters;
+		const { email, name } = e;
 		const code = Math.floor(100000 + Math.random() * 900000);
 		const html = verificationHTML
 			.replace('{{name}}', name)
