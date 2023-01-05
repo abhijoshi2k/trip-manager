@@ -200,7 +200,7 @@
 			let scode = null;
 
 			let scLink =
-				'https://script.google.com/macros/s/AKfycbx27-VXZ2UhvaGnVf16GvXTQK-wBahi-sUzNtqPCXqBGMUIKpAJ9vc7BpZW6lusWSX7/exec';
+				'https://script.google.com/macros/s/AKfycbzYrt_zk_OXjcx4UldC2O0i_oNRNssqyzZf5mnLPKyvHmpUOmsHdI-bQfiDxPlRs9iz/exec';
 
 			document
 				.getElementById('ver-form')
@@ -282,13 +282,22 @@
 						if (data.status == 'success') {
 							changeStatus(
 								emailStatus,
-								'Verification code sent to your email (Also check spam)',
+								'Verification code sent to your email (Also check spam)<br>It is valid for <b>3 minutes</b>',
 								'text-success'
 							);
 							verCodeOuter.classList.remove('d-none');
 							submitBtn.disabled = false;
 
 							scode = data.code;
+
+							setTimeout(() => {
+								changeStatus(
+									emailStatus,
+									'<b>Verification code expired.</b><br>Please <a href="javascript:location.reload()">reload the page</a>.',
+									'text-danger'
+								);
+								scode = null;
+							}, 180000);
 						} else {
 							regFieldset.disabled = false;
 							changeStatus(

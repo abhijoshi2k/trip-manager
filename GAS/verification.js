@@ -3,6 +3,16 @@ const verification = (e, ss) => {
 		const { email, reg_name, passEmail } = e;
 
 		let statusSheet = ss.getSheetByName('Form Status');
+
+		let maintenance = statusSheet.getRange(3, 2).getValue();
+		if (maintenance === 'On') {
+			return {
+				status: 'error',
+				message:
+					'Website is down for <b>maintenance</b>. Please try again later.'
+			};
+		}
+
 		let status = statusSheet.getRange(1, 2).getValue();
 
 		if (status === 'Temporarily Closed') {
