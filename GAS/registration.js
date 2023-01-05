@@ -1,6 +1,10 @@
 let maxActive = 150;
 let regViewLink =
 	'https://docs.google.com/spreadsheets/d/e/2PACX-1vTLWtk9Yfv9gfBIoSky04bpkkmATtOzUw5-buuA8w6woEVaagK9vqG6NQIAMQDYJQRe-Ek0f5lhHEQ7/pubhtml?gid=0';
+let validation = SpreadsheetApp.newDataValidation()
+	.requireValueInList(['No', 'Yes', 'Partially Paid'])
+	.setAllowInvalid(false)
+	.build();
 
 /**
  * @param {Object} e - Event object
@@ -43,13 +47,7 @@ const registration = (e, ss) => {
 			let val = range.getValue();
 			if (val === uuid) {
 				range.setValue(val + (i % 10));
-				sheet
-					.getRange(i, 8)
-					.setDataValidation(
-						SpreadsheetApp.newDataValidation()
-							.requireValueInList(['Yes', 'No'])
-							.build()
-					);
+				sheet.getRange('H2:H' + i).setDataValidation(validation);
 				found = true;
 				reqR = i;
 				break;
