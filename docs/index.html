@@ -164,6 +164,10 @@
 								class="btn btn-success"
 								id="submit-btn"
 								disabled
+								style="
+									cursor: not-allowed;
+									pointer-events: all !important;
+								"
 							>
 								Submit
 							</button>
@@ -200,7 +204,7 @@
 			let scode = null;
 
 			let scLink =
-				'https://script.google.com/macros/s/AKfycbzYrt_zk_OXjcx4UldC2O0i_oNRNssqyzZf5mnLPKyvHmpUOmsHdI-bQfiDxPlRs9iz/exec';
+				'https://script.google.com/macros/s/AKfycbyEc0y9TkaivkjVJUVWKZ1NLeMCn1DVorXd6UvjnzxifjHqwdhi5cgJ7IZOdcwc0Q/exec';
 
 			document
 				.getElementById('ver-form')
@@ -235,6 +239,16 @@
 			const changeStatus = (element, content, className) => {
 				element.innerHTML =
 					'<span class="' + className + '">' + content + '</span>';
+			};
+
+			const submitDisabled = (status) => {
+				if (status) {
+					submitBtn.setAttribute('disabled', '');
+					submitBtn.style.cursor = 'not-allowed';
+				} else {
+					submitBtn.removeAttribute('disabled');
+					submitBtn.style.cursor = 'pointer';
+				}
 			};
 
 			let selfReg = true;
@@ -286,7 +300,7 @@
 								'text-success'
 							);
 							verCodeOuter.classList.remove('d-none');
-							submitBtn.disabled = false;
+							submitDisabled(false);
 
 							scode = data.code;
 
@@ -318,7 +332,7 @@
 			};
 
 			const submitForm = () => {
-				submitBtn.disabled = true;
+				submitDisabled(true);
 				changeStatus(submitStatus, 'Verifying...', 'text-danger');
 
 				if (
@@ -334,7 +348,7 @@
 						'Incorrect verification code!',
 						'text-danger'
 					);
-					submitBtn.disabled = false;
+					submitDisabled(false);
 					return;
 				}
 
@@ -385,7 +399,7 @@
 								data.message,
 								'text-danger'
 							);
-							submitBtn.disabled = false;
+							submitDisabled(false);
 						}
 					})
 					.catch((err) => {
@@ -394,7 +408,7 @@
 							'Registration error! Try again.',
 							'text-danger'
 						);
-						submitBtn.disabled = false;
+						submitDisabled(false);
 					});
 			};
 		</script>

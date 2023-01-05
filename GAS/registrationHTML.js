@@ -16,12 +16,12 @@ let registrationHTML = `
     (Please note down your registration ID for future reference)
   </p>
   <p>
-    <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTLWtk9Yfv9gfBIoSky04bpkkmATtOzUw5-buuA8w6woEVaagK9vqG6NQIAMQDYJQRe-Ek0f5lhHEQ7/pubhtml?gid=0&single=true">Click here</a> to view current status of registrations
+    <a href="{{viewLink}}">Click here</a> to view current status of registrations
   </p>
   <p>
     Copy below link if above does not work
     <br>
-    <code>https://docs.google.com/spreadsheets/d/e/2PACX-1vTLWtk9Yfv9gfBIoSky04bpkkmATtOzUw5-buuA8w6woEVaagK9vqG6NQIAMQDYJQRe-Ek0f5lhHEQ7/pubhtml?gid=0&single=true</code>
+    <code>{{viewLink}}</code>
   </p>
   <p>Please do not reply to this mail</p>
   <p>

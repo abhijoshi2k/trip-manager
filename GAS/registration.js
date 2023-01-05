@@ -1,4 +1,6 @@
 let maxActive = 150;
+let regViewLink =
+	'https://docs.google.com/spreadsheets/d/e/2PACX-1vTLWtk9Yfv9gfBIoSky04bpkkmATtOzUw5-buuA8w6woEVaagK9vqG6NQIAMQDYJQRe-Ek0f5lhHEQ7/pubhtml?gid=0';
 
 /**
  * @param {Object} e - Event object
@@ -78,7 +80,8 @@ const registration = (e, ss) => {
 			.replace('{{name}}', e.name)
 			.replace('{{passEmail}}', e.passEmail)
 			.replace('{{status}}', status)
-			.replace('{{uuid}}', uuid);
+			.replace('{{uuid}}', uuid)
+			.replace(/{{viewLink}}/g, regViewLink);
 
 		const subject = 'Registration Successful';
 		const body = '';
