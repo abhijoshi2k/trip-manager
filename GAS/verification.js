@@ -1,3 +1,7 @@
+/**
+ * @param {Object} e - Event object
+ * @param {GoogleAppsScript.Spreadsheet.Spreadsheet} ss - Spreadsheet object
+ */
 const verification = (e, ss) => {
 	try {
 		const { email, reg_name, passEmail } = e;

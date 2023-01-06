@@ -6,7 +6,8 @@ function doPost(e) {
 	try {
 		const exs = {
 			verification: verification,
-			registration: registration
+			registration: registration,
+			checkStatus: checkStatus
 		};
 
 		e = JSON.parse(e.postData.contents);
