@@ -2,7 +2,7 @@ const fs = require('fs');
 const exec = require('child_process').exec;
 
 const current = fs.readFileSync('./automation/current.txt', 'utf8');
-let index = fs.readFileSync('./docs/index.html', 'utf8');
+let index = fs.readFileSync('./docs/js/index.js', 'utf8');
 
 function execute(command) {
 	return new Promise((resolve, reject) => {
@@ -30,7 +30,7 @@ function execute(command) {
 
 	index = index.replace(current, version);
 
-	fs.writeFileSync('./docs/index.html', index);
+	fs.writeFileSync('./docs/js/index.js', index);
 	fs.writeFileSync('./automation/current.txt', version);
 
 	output = await execute('clasp undeploy ' + current);

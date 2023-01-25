@@ -37,7 +37,10 @@ const verification = (e, ss) => {
 		let lr = sheet.getLastRow();
 
 		for (let i = 2; i <= lr; i++) {
-			if (sheet.getRange(i, 5).getValue() === passEmail) {
+			if (
+				sheet.getRange(i, 5).getValue().toLowerCase() ===
+				passEmail.toLowerCase()
+			) {
 				return {
 					status: 'error',
 					message: passEmail + ' already registered (Confirmed)'
@@ -49,7 +52,10 @@ const verification = (e, ss) => {
 		let wlLr = wlSheet.getLastRow();
 
 		for (let i = 2; i <= wlLr; i++) {
-			if (wlSheet.getRange(i, 6).getValue() === passEmail) {
+			if (
+				wlSheet.getRange(i, 6).getValue().toLowerCase() ===
+				passEmail.toLowerCase()
+			) {
 				return {
 					status: 'error',
 					message:

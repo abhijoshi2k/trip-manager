@@ -5,29 +5,126 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Check Status</title>
+
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+			crossorigin="anonymous"
+		/>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+			crossorigin="anonymous"
+		></script>
 	</head>
 	<body>
 		<div class="container py-5">
-			<div class="row">
-				<div class="col-md-6 offset-md-3">
-					<h1 class="mb-4">Check Status</h1>
-					<form id="status-form">
-						<fieldset id="status-fieldset">
-							<div class="mb-3">
-								<label for="data" class="form-label">
-									Enter registration ID or passenger's email
-								</label>
-								<input
-									type="text"
-									name="data"
-									id="data"
-									class="form-control"
-								/>
-							</div>
-						</fieldset>
-					</form>
+			<h3 class="mb-4 text-center">Check Status</h3>
+			<form id="status-form">
+				<fieldset id="status-fieldset">
+					<div class="mb-3 text-center">
+						<label for="data" class="form-label">
+							Enter registration ID or passenger's email
+						</label>
+						<input
+							type="text"
+							name="data"
+							id="data"
+							class="form-control text-center"
+							required
+						/>
+					</div>
+					<div class="mb-3 text-center">
+						<button type="submit" class="btn btn-primary">
+							Check Status
+						</button>
+					</div>
+				</fieldset>
+			</form>
+			<div
+				class="text-center py-4 mt-4 px-sm-5 border-1 border d-none"
+				id="results"
+			>
+				<h3 class="text-info">Status</h3>
+				<div>
+					<span id="data-type"></span>:
+					<b><span id="input-data"></span></b>
+					<br />
+					Status:
+					<b><span id="output-status" class="text-primary"></span></b>
 				</div>
 			</div>
+
+			<div
+				class="text-center py-4 mt-4 px-sm-5 border-1 border d-none text-danger"
+				id="results-err"
+			></div>
 		</div>
+
+		<script src="./js/index.js"></script>
+
+		<script>
+			const statusForm = document.getElementById('status-form');
+			const statusFieldset = document.getElementById('status-fieldset');
+			const results = document.getElementById('results');
+			const resultsErr = document.getElementById('results-err');
+
+			statusForm.addEventListener('submit', (e) => {
+				e.preventDefault();
+
+				const dataInput = document.getElementById('data').value.trim();
+
+				if (dataInput.length === 0) {
+					alert('Please enter a valid registration ID or email');
+					return;
+				}
+
+				statusFieldset.disabled = true;
+				results.classList.add('d-none');
+				resultsErr.classList.add('d-none');
+
+				fetch(scLink, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body: JSON.stringify({ data: dataInput, ex: 'checkStatus' })
+				})
+					.then((res) => res.json())
+					.then((data) => {
+						if (data.status === 'success') {
+							const { message } = data;
+
+							let type = dataInput.includes('@')
+								? 'Email'
+								: 'Registration ID';
+
+							let input = dataInput;
+							let output = message;
+
+							document.getElementById('data-type').innerText =
+								type;
+							document.getElementById('input-data').innerText =
+								input;
+							document.getElementById('output-status').innerText =
+								output;
+
+							results.classList.remove('d-none');
+							statusFieldset.disabled = false;
+						} else {
+							resultsErr.innerHTML = data.message;
+							resultsErr.classList.remove('d-none');
+							statusFieldset.disabled = false;
+						}
+					})
+					.catch((err) => {
+						console.log(err);
+						resultsErr.innerHTML = 'Unknown error occurred';
+						resultsErr.classList.remove('d-none');
+						statusFieldset.disabled = false;
+					});
+			});
+		</script>
 	</body>
 </html>

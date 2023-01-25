@@ -200,11 +200,10 @@
 			</div>
 		</div>
 
+		<script src="./js/index.js"></script>
+
 		<script>
 			let scode = null;
-
-			let scLink =
-				'https://script.google.com/macros/s/AKfycbwH3ABXZa740Upeehiv0_mzpa4JY8C5lHPTKO-0Wf-8KDRsOr35vOdTpshTDX0v3Ye6/exec';
 
 			document
 				.getElementById('ver-form')
@@ -273,9 +272,11 @@
 					'text-danger'
 				);
 
-				let email = document.getElementById('email').value;
-				let name = document.getElementById('name').value;
-				let passEmail = document.getElementById('pass_email').value;
+				let email = document.getElementById('email').value.trim();
+				let name = document.getElementById('name').value.trim();
+				let passEmail = document
+					.getElementById('pass_email')
+					.value.trim();
 
 				let data = {
 					email: email,
@@ -336,13 +337,13 @@
 				changeStatus(submitStatus, 'Verifying...', 'text-danger');
 
 				if (
-					document.getElementById('email').value ==
-					document.getElementById('pass_email').value
+					document.getElementById('email').value.trim() ==
+					document.getElementById('pass_email').value.trim()
 				) {
 					selfReg = true;
 				}
 
-				if (verCode.value != scode) {
+				if (verCode.value.trim() != scode) {
 					changeStatus(
 						submitStatus,
 						'Incorrect verification code!',
@@ -354,11 +355,11 @@
 
 				let email = selfReg
 					? 'self'
-					: document.getElementById('email').value;
-				let name = document.getElementById('name').value;
+					: document.getElementById('email').value.trim();
+				let name = document.getElementById('name').value.trim();
 				let passEmail = selfReg
-					? document.getElementById('email').value
-					: document.getElementById('pass_email').value;
+					? document.getElementById('email').value.trim()
+					: document.getElementById('pass_email').value.trim();
 
 				let data = {
 					email: email,

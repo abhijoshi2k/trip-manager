@@ -13,7 +13,10 @@ const checkStatus = (e, ss) => {
 		}
 
 		for (let i = 2; i <= lr; i++) {
-			if (sheet.getRange(i, searchColumn).getValue() === e.data) {
+			if (
+				sheet.getRange(i, searchColumn).getValue().toLowerCase() ===
+				e.data.toLowerCase()
+			) {
 				return {
 					status: 'success',
 					message: 'Confirmed'
@@ -25,7 +28,10 @@ const checkStatus = (e, ss) => {
 		let wlLr = wlSheet.getLastRow();
 
 		for (let i = 2; i <= wlLr; i++) {
-			if (wlSheet.getRange(i, searchColumn).getValue() === e.data) {
+			if (
+				wlSheet.getRange(i, searchColumn).getValue().toLowerCase() ===
+				e.data.toLowerCase()
+			) {
 				return {
 					status: 'success',
 					message: 'Waitlist: ' + (i - 1)
