@@ -1,4 +1,3 @@
-let maxActive = 150;
 let regViewLink =
 	'https://docs.google.com/spreadsheets/d/e/2PACX-1vTLWtk9Yfv9gfBIoSky04bpkkmATtOzUw5-buuA8w6woEVaagK9vqG6NQIAMQDYJQRe-Ek0f5lhHEQ7/pubhtml?gid=0';
 let validation = SpreadsheetApp.newDataValidation()
@@ -47,7 +46,10 @@ const registration = (e, ss) => {
 			let val = range.getValue();
 			if (val === uuid) {
 				range.setValue(val + (i % 10));
-				sheet.getRange('H2:H' + i).setDataValidation(validation);
+				// sheet.getRange('H2:H' + i).setDataValidation(validation);
+				sheet
+					.getRange(2, paymentCol, i - 1, 1)
+					.setDataValidation(validation);
 				found = true;
 				reqR = i;
 				break;
@@ -64,7 +66,7 @@ const registration = (e, ss) => {
 		let status = 'Confirmed';
 		if (reqR > maxActive + 1) {
 			let wlSheet = ss.getSheetByName('Waitlist');
-			let range = sheet.getRange(reqR, 2, 1, 8);
+			let range = sheet.getRange(reqR, 2, 1, 26);
 			let values = range.getValues();
 			values[0].unshift('');
 			wlSheet.appendRow(values[0]);

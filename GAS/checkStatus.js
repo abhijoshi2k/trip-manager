@@ -7,9 +7,9 @@ const checkStatus = (e, ss) => {
 		let sheet = ss.getSheetByName('Active');
 		let lr = sheet.getLastRow();
 
-		let searchColumn = 3;
+		let searchColumn = regIdCol;
 		if (e.data.includes('@')) {
-			searchColumn = 5;
+			searchColumn = passEmailCol;
 		}
 
 		for (let i = 2; i <= lr; i++) {
@@ -40,7 +40,7 @@ const checkStatus = (e, ss) => {
 		}
 
 		let dataType = 'registration ID';
-		if (searchColumn === 5) {
+		if (searchColumn === passEmailCol) {
 			dataType = 'email';
 		}
 

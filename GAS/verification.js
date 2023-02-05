@@ -38,7 +38,7 @@ const verification = (e, ss) => {
 
 		for (let i = 2; i <= lr; i++) {
 			if (
-				sheet.getRange(i, 5).getValue().toLowerCase() ===
+				sheet.getRange(i, passEmailCol).getValue().toLowerCase() ===
 				passEmail.toLowerCase()
 			) {
 				return {
@@ -53,7 +53,7 @@ const verification = (e, ss) => {
 
 		for (let i = 2; i <= wlLr; i++) {
 			if (
-				wlSheet.getRange(i, 6).getValue().toLowerCase() ===
+				wlSheet.getRange(i, passEmailCol).getValue().toLowerCase() ===
 				passEmail.toLowerCase()
 			) {
 				return {
