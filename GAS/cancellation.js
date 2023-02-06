@@ -162,3 +162,5 @@ const cancellation = (e, ss) => {
 		return { status: 'error', message: 'Unknown error occurred!' };
 	}
 };
+
+function sendCancellationMail() {}

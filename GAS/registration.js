@@ -1,5 +1,3 @@
-let regViewLink =
-	'https://docs.google.com/spreadsheets/d/e/2PACX-1vTLWtk9Yfv9gfBIoSky04bpkkmATtOzUw5-buuA8w6woEVaagK9vqG6NQIAMQDYJQRe-Ek0f5lhHEQ7/pubhtml?gid=0';
 let validation = SpreadsheetApp.newDataValidation()
 	.requireValueInList(['No', 'Yes', 'Partially Paid'])
 	.setAllowInvalid(false)

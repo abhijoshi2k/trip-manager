@@ -14,9 +14,10 @@ Passenger
 make columns file
 mail on cancellation
 mail on wl -> confirmed
-Add pwl support for verification, checkStatus and cancellation
+Add pwl support for registration, verification, checkStatus and cancellation
 cancellation remark add name of person who cancelled
 Cancellation consider columns from 2nd col (exclude sr no)
 how to pay screen after registration
 how to pay page
 add triggers to close registration and cancellation
+change 3 min timeout to 10 mins
