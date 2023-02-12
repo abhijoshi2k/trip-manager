@@ -106,7 +106,7 @@
 									Your email address (ending with @worley.com)
 									<span class="text-danger">*</span>
 								</label>
-								<!-- <input
+								<input
 									type="email"
 									class="form-control"
 									id="email"
@@ -114,14 +114,8 @@
 									placeholder="Enter your email"
 									pattern=".*@worley.com"
 									required
-								/> -->
-								<input
-									type="email"
-									class="form-control"
-									id="email"
-									name="email"
-									placeholder="Enter your email"
-									required
+									oninvalid="this.setCustomValidity('Please enter a valid Worley email address')"
+									oninput="this.setCustomValidity('')"
 								/>
 							</div>
 
@@ -396,6 +390,19 @@
 		</div>
 
 		<script src="./js/index.js"></script>
+
+		<script>
+			const ignoreWorley = true;
+			if (
+				!location.href.includes('abhijoshi2k.github.io') &&
+				ignoreWorley
+			) {
+				let temp = document.getElementById('email');
+				temp.removeAttribute('pattern');
+				temp.removeAttribute('oninvalid');
+				temp.removeAttribute('oninput');
+			}
+		</script>
 
 		<script>
 			let scode = null;
