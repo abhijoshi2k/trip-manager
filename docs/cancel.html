@@ -228,7 +228,9 @@
 
 			document
 				.getElementById('cancel-form')
-				.addEventListener('submit', () => {
+				.addEventListener('submit', (e) => {
+					e.preventDefault();
+
 					if (submitFieldset.disabled) {
 						return;
 					}
