@@ -22,13 +22,13 @@
 	<body>
 		<div class="container py-5" id="full-reg">
 			<div class="row">
-				<div class="col-md-6 offset-md-3">
+				<div class="col-lg-6 offset-lg-3">
 					<h1>Registration</h1>
-					<h6>Only Worley employees can self-register</h6>
-					<small
-						>Others should approach Worley
-						employee/organizers</small
-					>
+					<h6>Only Worley persons can self-register</h6>
+					<small>
+						Others can register <b>only</b> through Worley
+						person/organizers
+					</small>
 					<div class="mb-4"></div>
 					<form id="ver-form">
 						<fieldset id="reg-fieldset">
@@ -51,7 +51,7 @@
 										class="form-check-label"
 										for="reg-self"
 									>
-										Self
+										Self (Worley person)
 									</label>
 								</div>
 								<div class="form-check form-check-inline">
@@ -77,7 +77,7 @@
 									Your email address (ending with @worley.com)
 									<span class="text-danger">*</span>
 								</label>
-								<input
+								<!-- <input
 									type="email"
 									class="form-control"
 									id="email"
@@ -85,15 +85,15 @@
 									placeholder="Enter your email"
 									pattern=".*@worley.com"
 									required
-								/>
-								<!-- <input
+								/> -->
+								<input
 									type="email"
 									class="form-control"
 									id="email"
 									name="email"
 									placeholder="Enter your email"
 									required
-								/> -->
+								/>
 							</div>
 
 							<div class="mb-3 d-none" id="passenger-email-outer">
@@ -123,6 +123,172 @@
 									placeholder="Enter your name"
 									required
 								/>
+							</div>
+
+							<div class="mb-3">
+								<label for="age" class="form-label">
+									Passenger Age
+									<span class="text-danger">*</span>
+								</label>
+								<input
+									type="number"
+									class="form-control"
+									id="age"
+									name="age"
+									placeholder="Enter your age"
+									min="1"
+									max="100"
+									step="1"
+									required
+								/>
+							</div>
+
+							<!-- mobile and emergency contact number side by side -->
+							<div class="row">
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label for="mobile" class="form-label">
+											Mobile number
+											<span class="text-danger">*</span>
+										</label>
+										<input
+											type="tel"
+											class="form-control"
+											id="mobile"
+											name="mobile"
+											placeholder="Enter your mobile number"
+											required
+										/>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label
+											for="emergency"
+											class="form-label"
+										>
+											Emergency contact number
+											<span class="text-danger">*</span>
+										</label>
+										<input
+											type="tel"
+											class="form-control"
+											id="emergency"
+											name="emergency"
+											placeholder="Emergency contact number"
+											required
+										/>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label
+											for="boarding"
+											class="form-label"
+										>
+											Boarding station
+											<span class="text-danger">*</span>
+										</label>
+										<select
+											class="form-select"
+											id="boarding"
+											name="boarding"
+											required
+										>
+											<option
+												value="null"
+												id="boarding-select"
+											>
+												Select
+											</option>
+											<option value="CSMT">CSMT</option>
+											<option value="Dadar">Dadar</option>
+											<option value="Thane">Thane</option>
+											<option value="Kalyan">
+												Kalyan
+											</option>
+											<option value="Pune">Pune</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label
+											for="alighting"
+											class="form-label"
+										>
+											Alighting station
+											<span class="text-danger">*</span>
+										</label>
+										<select
+											class="form-select"
+											id="alighting"
+											name="alighting"
+											required
+										>
+											<option
+												value="null"
+												id="alighting-select"
+											>
+												Select
+											</option>
+											<option value="CSMT">CSMT</option>
+											<option value="Dadar">Dadar</option>
+											<option value="Thane">Thane</option>
+											<option value="Kalyan">
+												Kalyan
+											</option>
+											<option value="Pune">Pune</option>
+										</select>
+									</div>
+								</div>
+							</div>
+
+							<!-- (office & location) and department -->
+							<div class="row">
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label
+											for="office_location"
+											class="form-label"
+										>
+											Office location
+											<span class="text-danger">*</span>
+										</label>
+										<input
+											type="text"
+											class="form-control"
+											id="office_location"
+											name="office_location"
+											placeholder="Enter your office location"
+											required
+										/>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label
+											for="department"
+											class="form-label"
+										>
+											Department
+											<span class="text-danger">*</span>
+										</label>
+										<input
+											type="text"
+											class="form-control"
+											id="department"
+											name="department"
+											placeholder="Enter your department"
+											required
+										/>
+									</div>
+								</div>
 							</div>
 
 							<div class="mb-3">
@@ -265,6 +431,17 @@
 			};
 
 			const requestVerificationCode = () => {
+				// boarding/alighting must have a value
+				if (document.getElementById('boarding').value == 'null') {
+					alert('Please select boarding station');
+					return;
+				} else if (
+					document.getElementById('alighting').value == 'null'
+				) {
+					alert('Please select alighting station');
+					return;
+				}
+
 				regFieldset.disabled = true;
 				changeStatus(
 					emailStatus,
@@ -361,12 +538,23 @@
 					? document.getElementById('email').value.trim()
 					: document.getElementById('pass_email').value.trim();
 
+				let initialStatus = regFieldset.disabled;
+				regFieldset.disabled = false;
+
+				let verForm = document.getElementById('ver-form');
+				let formData = new FormData(verForm);
+				let values = Object.fromEntries(formData.entries());
+
 				let data = {
 					email: email,
 					passEmail: passEmail,
 					name: name,
 					ex: 'registration'
 				};
+
+				data = { ...values, ...data };
+
+				regFieldset.disabled = initialStatus;
 
 				fetch(scLink, {
 					method: 'POST',

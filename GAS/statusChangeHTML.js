@@ -2,14 +2,14 @@ let statusChangeHTML = `
   <p>
     Hello,
     <br>
-    This is to inform you that the status of your registration has been changed.
+    This is to inform you that the status of the following registration has been changed.
   </p>
   <p>
     Name: <b>{{name}}</b>
     <br>
     Email: <b>{{passEmail}}</b>
     <br>
-    Registration status: <b>{{status}}</b>
+    Registration status: <b>Confirmed</b>
     <br>
     Registration ID: <b>{{uuid}}</b>
     <br>

@@ -21,3 +21,4 @@ how to pay screen after registration
 how to pay page
 add triggers to close registration and cancellation
 change 3 min timeout to 10 mins
+check for cancelled in check status

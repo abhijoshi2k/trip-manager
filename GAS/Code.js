@@ -8,6 +8,7 @@ function doPost(e) {
 			verification: verification,
 			registration: registration,
 			checkStatus: checkStatus,
+			verifyCancellation: verifyCancellation,
 			cancellation: cancellation
 		};
 

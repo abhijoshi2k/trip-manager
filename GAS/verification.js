@@ -72,7 +72,7 @@ const verification = (e, ss) => {
 			.replace('{{name}}', reg_name)
 			.replace('{{code}}', code);
 
-		const subject = 'Verify Your E-mail Address';
+		const subject = 'Akkalkot registration';
 		const body = '';
 		const options = {
 			htmlBody: html,

@@ -26,10 +26,20 @@ const registration = (e, ss) => {
 			timestamp,
 			uuid,
 			e.name,
+			'',
+			'',
+			'',
+			e.age,
+			e.mobile,
+			e.emergency,
+			e.boarding,
+			e.alighting,
+			e.office_location,
+			e.department,
+			'No',
 			e.passEmail,
 			e.email,
 			'',
-			'No',
 			''
 		];
 

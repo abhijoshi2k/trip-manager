@@ -1,3 +1,20 @@
+const sendCancellationMail = (recepient, name, uuid, cc) => {
+	const subject = 'Cancellation Successful';
+	const body = '';
+	const options = {
+		htmlBody: cancellationHTML
+			.replace('{{name}}', name)
+			.replace('{{uuid}}', uuid),
+		name: 'Akkalkot trip'
+	};
+
+	if (cc.trim() !== 'self') {
+		options.cc = cc.trim();
+	}
+
+	GmailApp.sendEmail(recepient, subject, body, options);
+};
+
 /**
  * @param {Object} e - Event object
  * @param {GoogleAppsScript.Spreadsheet.Spreadsheet} ss - Spreadsheet object
@@ -62,6 +79,11 @@ const cancellation = (e, ss) => {
 					.getRange(i, autoRemarksCol)
 					.setValue(initialRemarks + 'Cancelled at ' + timestamp);
 
+				let cName = sheet.getRange(i, nameCol).getValue();
+				let cUuid = sheet.getRange(i, regIdCol).getValue();
+				let cRegBy = sheet.getRange(i, registeredByCol).getValue();
+				let cPassEmail = sheet.getRange(i, passEmailCol).getValue();
+
 				let cLr = canSheet.getLastRow();
 
 				sheet
@@ -69,23 +91,60 @@ const cancellation = (e, ss) => {
 					.copyTo(canSheet.getRange(cLr + 1, 2));
 
 				let wl = false;
+				let changeName = '';
+				let changePassEmail = '';
+				let changeUuid = '';
+				let changeRegBy = '';
+
 				if (pwlSheet.getLastRow() > 1) {
+					let init = pwlSheet.getRange(2, autoRemarksCol).getValue();
+					if (init.length > 0) {
+						init += '\n';
+					}
+
 					pwlSheet
 						.getRange(2, autoRemarksCol)
 						.setValue(
-							'Confirmed via priority WL replacing ' +
+							init +
+								'Confirmed via priority WL replacing ' +
 								sheet.getRange(i, regIdCol).getValue()
 						);
+
+					changeName = pwlSheet.getRange(2, nameCol).getValue();
+					changePassEmail = pwlSheet
+						.getRange(2, passEmailCol)
+						.getValue();
+					changeUuid = pwlSheet.getRange(2, regIdCol).getValue();
+					changeRegBy = pwlSheet
+						.getRange(2, registeredByCol)
+						.getValue();
+
 					pwlSheet.getRange(2, 2, 1, 26).copyTo(sheet.getRange(i, 2));
 					pwlSheet.deleteRow(2);
 					wl = true;
 				} else if (wlSheet.getLastRow() > 1) {
+					let init = wlSheet.getRange(2, autoRemarksCol).getValue();
+					if (init.length > 0) {
+						init += '\n';
+					}
+
 					wlSheet
 						.getRange(2, autoRemarksCol)
 						.setValue(
-							'Confirmed via WL replacing ' +
+							init +
+								'Confirmed via WL replacing ' +
 								sheet.getRange(i, regIdCol).getValue()
 						);
+
+					changeName = wlSheet.getRange(2, nameCol).getValue();
+					changePassEmail = wlSheet
+						.getRange(2, passEmailCol)
+						.getValue();
+					changeUuid = wlSheet.getRange(2, regIdCol).getValue();
+					changeRegBy = wlSheet
+						.getRange(2, registeredByCol)
+						.getValue();
+
 					wlSheet.getRange(2, 2, 1, 26).copyTo(sheet.getRange(i, 2));
 					wlSheet.deleteRow(2);
 					wl = true;
@@ -93,7 +152,31 @@ const cancellation = (e, ss) => {
 
 				if (!wl) {
 					sheet.deleteRow(i);
+				} else {
+					let body = statusChangeHTML
+						.replace('{{name}}', changeName)
+						.replace('{{passEmail}}', changePassEmail)
+						.replace('{{uuid}}', changeUuid)
+						.replace(/{{viewLink}}/g, regViewLink);
+
+					let options = {
+						htmlBody: body,
+						name: 'Akkalkot trip'
+					};
+
+					if (changeRegBy.trim() !== 'self') {
+						options.cc = changeRegBy;
+					}
+
+					GmailApp.sendEmail(
+						changePassEmail,
+						'Akkalkot trip status change',
+						'',
+						options
+					);
 				}
+
+				sendCancellationMail(cPassEmail, cName, cUuid, cRegBy);
 
 				return { status: 'success' };
 			}
@@ -116,6 +199,11 @@ const cancellation = (e, ss) => {
 					.getRange(i, autoRemarksCol)
 					.setValue(initialRemarks + 'Cancelled at ' + timestamp);
 
+				let cName = wlSheet.getRange(i, nameCol).getValue();
+				let cUuid = wlSheet.getRange(i, regIdCol).getValue();
+				let cRegBy = wlSheet.getRange(i, registeredByCol).getValue();
+				let cPassEmail = wlSheet.getRange(i, passEmailCol).getValue();
+
 				let cLr = canSheet.getLastRow();
 
 				wlSheet
@@ -123,6 +211,8 @@ const cancellation = (e, ss) => {
 					.copyTo(canSheet.getRange(cLr + 1, 2));
 
 				wlSheet.deleteRow(i);
+
+				sendCancellationMail(cPassEmail, cName, cUuid, cRegBy);
 
 				return { status: 'success' };
 			}
@@ -145,6 +235,11 @@ const cancellation = (e, ss) => {
 					.getRange(i, autoRemarksCol)
 					.setValue(initialRemarks + 'Cancelled at ' + timestamp);
 
+				let cName = pwlSheet.getRange(i, nameCol).getValue();
+				let cUuid = pwlSheet.getRange(i, regIdCol).getValue();
+				let cRegBy = pwlSheet.getRange(i, registeredByCol).getValue();
+				let cPassEmail = pwlSheet.getRange(i, passEmailCol).getValue();
+
 				let cLr = canSheet.getLastRow();
 
 				pwlSheet
@@ -152,6 +247,8 @@ const cancellation = (e, ss) => {
 					.copyTo(canSheet.getRange(cLr + 1, 2));
 
 				pwlSheet.deleteRow(i);
+
+				sendCancellationMail(cPassEmail, cName, cUuid, cRegBy);
 
 				return { status: 'success' };
 			}
@@ -162,5 +259,3 @@ const cancellation = (e, ss) => {
 		return { status: 'error', message: 'Unknown error occurred!' };
 	}
 };
-
-function sendCancellationMail() {}

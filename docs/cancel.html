@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cancel Registration</title>
+
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+			crossorigin="anonymous"
+		/>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+			crossorigin="anonymous"
+		></script>
+	</head>
+	<body>
+		<div class="container py-5" id="form-div">
+			<h3 class="mb-4 text-center">Cancel Registration</h3>
+			<div class="text-danger text-center">
+				<p>
+					This action cannot be undone!
+					<br />
+					If you were registered by someone else, please contact them
+					to cancel your registration.
+					<br />
+					Verification mail will be sent to verify your identity.
+				</p>
+			</div>
+			<form id="cancel-form">
+				<fieldset id="verify-fieldset">
+					<div class="mb-3 text-center">
+						<label for="data" class="form-label">
+							Enter registration ID or passenger's email
+							<span class="text-danger">*</span>
+						</label>
+						<input
+							type="text"
+							name="data"
+							id="data"
+							class="form-control text-center"
+							required
+						/>
+					</div>
+					<div class="mb-2 text-center">
+						<button
+							type="button"
+							class="btn btn-primary"
+							id="verify-btn"
+						>
+							Send verification mail
+						</button>
+					</div>
+					<div class="mb-3">
+						<p
+							id="verification-status"
+							class="text-center d-none"
+						></p>
+					</div>
+				</fieldset>
+				<fieldset id="submit-fieldset" disabled>
+					<div class="mb-3 text-center">
+						<label for="code" class="form-label">
+							Enter verification code
+							<span class="text-danger">*</span>
+						</label>
+						<input
+							type="text"
+							name="code"
+							id="code"
+							class="form-control text-center"
+							required
+						/>
+					</div>
+					<div class="mb-2 text-center">
+						<button type="button" class="btn btn-danger">
+							Cancel registration
+						</button>
+					</div>
+					<div class="mb-3">
+						<p id="submit-status" class="text-center d-none"></p>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+
+		<div id="success-cancellation" class="py-5 d-none">
+			<div class="text-center">
+				<h5 class="card-title">Cancellation successful</h5>
+				<p class="card-text">You will receive a confirmation email.</p>
+				<p class="card-text">
+					Please check your spam folder if you do not receive the
+					email.
+				</p>
+			</div>
+		</div>
+
+		<script src="./js/index.js"></script>
+
+		<script>
+			const verifyBtn = document.getElementById('verify-btn');
+			const verificationStatus = document.getElementById(
+				'verification-status'
+			);
+			const submitStatus = document.getElementById('submit-status');
+			const verifyFieldset = document.getElementById('verify-fieldset');
+			const submitFieldset = document.getElementById('submit-fieldset');
+
+			let scode = null;
+			let email = null;
+			let id = null;
+
+			function setVerificationStatus(message = '', spanClass = '') {
+				verificationStatus.classList.remove('d-none');
+				verificationStatus.innerHTML = `
+						<span class="${spanClass}">${message}</span>
+					`;
+			}
+
+			function setSubmitStatus(message = '', spanClass = '') {
+				submitStatus.classList.remove('d-none');
+				submitStatus.innerHTML = `
+						<span class="${spanClass}">${message}</span>
+					`;
+			}
+
+			verifyBtn.addEventListener('click', () => {
+				const data = document.getElementById('data').value;
+
+				if (data.length < 5) {
+					setVerificationStatus(
+						'Please enter a valid ID or email',
+						'text-danger'
+					);
+					return;
+				}
+
+				verifyFieldset.disabled = true;
+
+				setVerificationStatus(
+					'Sending verification mail...',
+					'text-success'
+				);
+
+				fetch(scLink, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body: JSON.stringify({
+						data: data,
+						ex: 'verifyCancellation'
+					})
+				})
+					.then((res) => res.json())
+					.then((res) => {
+						if (res.status === 'success') {
+							scode = res.code;
+							id = res.uuid;
+
+							setVerificationStatus(
+								'Verification mail sent to <b>' +
+									res.email +
+									'</b>. Code valid for 3 minutes.',
+								'text-success'
+							);
+
+							submitFieldset.disabled = false;
+
+							setTimeout(() => {
+								verifyFieldset.disabled = false;
+								submitFieldset.disabled = true;
+								setVerificationStatus(
+									'Verification code expired',
+									'text-danger'
+								);
+							}, 180000);
+						} else {
+							setVerificationStatus(res.message, 'text-danger');
+
+							verifyFieldset.disabled = false;
+						}
+					})
+					.catch((err) => {
+						console.log(err);
+
+						setVerificationStatus(
+							'Verification mail error!',
+							'text-danger'
+						);
+
+						verifyFieldset.disabled = false;
+					});
+			});
+
+			document
+				.getElementById('cancel-form')
+				.addEventListener('submit', () => {
+					if (submitFieldset.disabled) {
+						return;
+					}
+
+					const code = document.getElementById('code').value;
+
+					if (code.trim() !== scode + '') {
+						setSubmitStatus(
+							'Incorrect verification code',
+							'text-danger'
+						);
+						return;
+					}
+
+					submitFieldset.disabled = true;
+
+					setSubmitStatus(
+						'Cancelling registration...',
+						'text-success'
+					);
+
+					fetch(scLink, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						},
+						body: JSON.stringify({
+							regid: id,
+							ex: 'cancellation'
+						})
+					})
+						.then((res) => res.json())
+						.then((res) => {
+							if (res.status === 'success') {
+								setSubmitStatus(
+									'Registration cancelled successfully!',
+									'text-success'
+								);
+
+								document.getElementById('form-div').remove();
+								document
+									.getElementById('success-cancellation')
+									.classList.remove('d-none');
+							} else {
+								setSubmitStatus(res.message, 'text-danger');
+
+								submitFieldset.disabled = false;
+							}
+						})
+						.catch((err) => {
+							console.log(err);
+
+							setSubmitStatus(
+								'Registration cancellation error!',
+								'text-danger'
+							);
+
+							submitFieldset.disabled = false;
+						});
+				});
+		</script>
+	</body>
+</html>
