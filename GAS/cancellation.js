@@ -118,7 +118,7 @@ const cancellation = (e, ss) => {
 						.getRange(2, autoRemarksCol)
 						.setValue(
 							init +
-								'Confirmed via priority WL replacing ' +
+								'Confirmed via PWL replacing ' +
 								sheet.getRange(i, regIdCol).getValue()
 						);
 
