@@ -61,7 +61,7 @@
 					<div class="mb-4"></div>
 					<form id="ver-form">
 						<fieldset id="reg-fieldset">
-							<div class="mb-3">
+							<div class="mb-3" id="reg-type-outer">
 								<div class="mb-3">
 									Registration type
 									<span class="text-danger">*</span>
@@ -316,7 +316,40 @@
 								</div>
 							</div>
 
-							<div class="mb-3">
+							<fieldset
+								id="admin-fieldset"
+								class="d-none"
+								disabled
+							>
+								<div class="mb-3">
+									<label
+										for="admin_password"
+										class="form-label"
+										>Admin master password
+										<span class="text-danger">*</span>
+									</label>
+									<input
+										type="password"
+										class="form-control"
+										id="admin_password"
+										required
+									/>
+								</div>
+
+								<div class="form-check mb-3">
+									<input
+										class="form-check-input"
+										type="checkbox"
+										value="admin"
+										id="pwl"
+									/>
+									<label class="form-check-label" for="pwl">
+										Add to PWL
+									</label>
+								</div>
+							</fieldset>
+
+							<div class="mb-3" id="ver-outer">
 								<button
 									type="submit"
 									class="btn btn-primary"
@@ -403,6 +436,11 @@
 				temp.removeAttribute('pattern');
 				temp.removeAttribute('oninvalid');
 				temp.removeAttribute('oninput');
+			}
+
+			let admin = false;
+			if (location.href.includes('isadmin=true')) {
+				admin = true;
 			}
 		</script>
 
@@ -527,7 +565,7 @@
 									'text-danger'
 								);
 								scode = null;
-							}, 180000);
+							}, 600000);
 						} else {
 							regFieldset.disabled = false;
 							changeStatus(
@@ -558,7 +596,7 @@
 					selfReg = true;
 				}
 
-				if (verCode.value.trim() != scode) {
+				if (verCode.value.trim() != scode && !admin) {
 					changeStatus(
 						submitStatus,
 						'Incorrect verification code!',
@@ -589,6 +627,15 @@
 					name: name,
 					ex: 'registration'
 				};
+
+				if (admin) {
+					data.admin = true;
+					data.adminPass = document
+						.getElementById('admin_password')
+						.value.trim();
+
+					data.pwl = document.getElementById('pwl').checked;
+				}
 
 				data = { ...values, ...data };
 
@@ -638,6 +685,25 @@
 						submitDisabled(false);
 					});
 			};
+		</script>
+
+		<script>
+			if (admin) {
+				let afs = document.querySelector('#admin-fieldset');
+				afs.disabled = false;
+				afs.classList.remove('d-none');
+
+				document.getElementById('reg-other').click();
+				document.getElementById('reg-type-outer').style.display =
+					'none';
+
+				document.getElementById('ver-outer').style.display = 'none';
+				document.getElementById('submit-btn').removeAttribute('style');
+				document
+					.getElementById('submit-btn')
+					.removeAttribute('disabled');
+				document.getElementById('ver-code').removeAttribute('required');
+			}
 		</script>
 	</body>
 </html>

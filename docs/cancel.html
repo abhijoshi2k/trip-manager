@@ -131,6 +131,13 @@
 		<script src="./js/index.js"></script>
 
 		<script>
+			let admin = false;
+			if (location.href.includes('isadmin=true')) {
+				admin = true;
+			}
+		</script>
+
+		<script>
 			const verifyBtn = document.getElementById('verify-btn');
 			const verificationStatus = document.getElementById(
 				'verification-status'
@@ -158,7 +165,7 @@
 			}
 
 			verifyBtn.addEventListener('click', () => {
-				const data = document.getElementById('data').value;
+				const data = document.getElementById('data').value.trim();
 
 				if (data.length < 5) {
 					setVerificationStatus(
@@ -207,7 +214,7 @@
 									'Verification code expired',
 									'text-danger'
 								);
-							}, 180000);
+							}, 600000);
 						} else {
 							setVerificationStatus(res.message, 'text-danger');
 
@@ -235,9 +242,9 @@
 						return;
 					}
 
-					const code = document.getElementById('code').value;
+					const code = document.getElementById('code').value.trim();
 
-					if (code.trim() !== scode + '') {
+					if (code.trim() !== scode + '' && !admin) {
 						setSubmitStatus(
 							'Incorrect verification code',
 							'text-danger'
@@ -258,8 +265,12 @@
 							'Content-Type': 'application/x-www-form-urlencoded'
 						},
 						body: JSON.stringify({
-							regid: id,
-							ex: 'cancellation'
+							regid: admin
+								? document.getElementById('data').value.trim()
+								: id,
+							ex: 'cancellation',
+							admin: admin,
+							adminPass: admin ? code : ''
 						})
 					})
 						.then((res) => res.json())
@@ -291,6 +302,18 @@
 							submitFieldset.disabled = false;
 						});
 				});
+		</script>
+
+		<script>
+			if (admin) {
+				document.getElementById('verify-btn').style.display = 'none';
+				document.getElementById('submit-fieldset').disabled = false;
+				document.querySelector('label[for="code"]').innerHTML =
+					'Admin password <span class="text-danger">*</span>';
+				document
+					.getElementById('code')
+					.setAttribute('type', 'password');
+			}
 		</script>
 	</body>
 </html>

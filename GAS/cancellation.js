@@ -21,6 +21,13 @@ const sendCancellationMail = (recepient, name, uuid, cc) => {
  */
 const cancellation = (e, ss) => {
 	try {
+		if (e.admin && e.adminPass !== masterPwd) {
+			return {
+				status: 'error',
+				message: 'Incorrect password!'
+			};
+		}
+
 		let statusSheet = ss.getSheetByName('Form Status');
 
 		let maintenance = statusSheet.getRange(3, 2).getValue();
@@ -77,7 +84,12 @@ const cancellation = (e, ss) => {
 				}
 				sheet
 					.getRange(i, autoRemarksCol)
-					.setValue(initialRemarks + 'Cancelled at ' + timestamp);
+					.setValue(
+						initialRemarks +
+							'Cancelled at ' +
+							timestamp +
+							(e.admin ? ' by admin' : '')
+					);
 
 				let cName = sheet.getRange(i, nameCol).getValue();
 				let cUuid = sheet.getRange(i, regIdCol).getValue();
@@ -197,7 +209,12 @@ const cancellation = (e, ss) => {
 				}
 				wlSheet
 					.getRange(i, autoRemarksCol)
-					.setValue(initialRemarks + 'Cancelled at ' + timestamp);
+					.setValue(
+						initialRemarks +
+							'Cancelled at ' +
+							timestamp +
+							(e.admin ? ' by admin' : '')
+					);
 
 				let cName = wlSheet.getRange(i, nameCol).getValue();
 				let cUuid = wlSheet.getRange(i, regIdCol).getValue();
@@ -218,39 +235,50 @@ const cancellation = (e, ss) => {
 			}
 		}
 
-		let pwlLr = pwlSheet.getLastRow();
+		if (e.admin) {
+			let pwlLr = pwlSheet.getLastRow();
 
-		for (let i = 2; i <= pwlLr; i++) {
-			if (
-				pwlSheet.getRange(i, regIdCol).getValue().toLowerCase() ===
-				e.regid.toLowerCase()
-			) {
-				let initialRemarks = pwlSheet
-					.getRange(i, autoRemarksCol)
-					.getValue();
-				if (initialRemarks.length > 0) {
-					initialRemarks += '\n';
+			for (let i = 2; i <= pwlLr; i++) {
+				if (
+					pwlSheet.getRange(i, regIdCol).getValue().toLowerCase() ===
+					e.regid.toLowerCase()
+				) {
+					let initialRemarks = pwlSheet
+						.getRange(i, autoRemarksCol)
+						.getValue();
+					if (initialRemarks.length > 0) {
+						initialRemarks += '\n';
+					}
+					pwlSheet
+						.getRange(i, autoRemarksCol)
+						.setValue(
+							initialRemarks +
+								'Cancelled at ' +
+								timestamp +
+								' by admin'
+						);
+
+					let cName = pwlSheet.getRange(i, nameCol).getValue();
+					let cUuid = pwlSheet.getRange(i, regIdCol).getValue();
+					let cRegBy = pwlSheet
+						.getRange(i, registeredByCol)
+						.getValue();
+					let cPassEmail = pwlSheet
+						.getRange(i, passEmailCol)
+						.getValue();
+
+					let cLr = canSheet.getLastRow();
+
+					pwlSheet
+						.getRange(i, 2, 1, 26)
+						.copyTo(canSheet.getRange(cLr + 1, 2));
+
+					pwlSheet.deleteRow(i);
+
+					sendCancellationMail(cPassEmail, cName, cUuid, cRegBy);
+
+					return { status: 'success' };
 				}
-				pwlSheet
-					.getRange(i, autoRemarksCol)
-					.setValue(initialRemarks + 'Cancelled at ' + timestamp);
-
-				let cName = pwlSheet.getRange(i, nameCol).getValue();
-				let cUuid = pwlSheet.getRange(i, regIdCol).getValue();
-				let cRegBy = pwlSheet.getRange(i, registeredByCol).getValue();
-				let cPassEmail = pwlSheet.getRange(i, passEmailCol).getValue();
-
-				let cLr = canSheet.getLastRow();
-
-				pwlSheet
-					.getRange(i, 2, 1, 26)
-					.copyTo(canSheet.getRange(cLr + 1, 2));
-
-				pwlSheet.deleteRow(i);
-
-				sendCancellationMail(cPassEmail, cName, cUuid, cRegBy);
-
-				return { status: 'success' };
 			}
 		}
 

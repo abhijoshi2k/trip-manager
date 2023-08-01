@@ -1,6 +1,7 @@
 const sheetURL =
 	'https://docs.google.com/spreadsheets/d/14BWPC4ec-02ERfk-vljz2Ve8zDiCyYLpOn-Xrcg7slI/edit#gid=0';
 var ss = SpreadsheetApp.openByUrl(sheetURL);
+const masterPwd = 'Swami@Worley';
 
 function doPost(e) {
 	try {

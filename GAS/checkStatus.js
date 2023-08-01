@@ -39,6 +39,36 @@ const checkStatus = (e, ss) => {
 			}
 		}
 
+		let pwlSheet = ss.getSheetByName('Priority Waitlist');
+		let pwlLr = pwlSheet.getLastRow();
+
+		for (let i = 2; i <= pwlLr; i++) {
+			if (
+				pwlSheet.getRange(i, searchColumn).getValue().toLowerCase() ===
+				e.data.toLowerCase()
+			) {
+				return {
+					status: 'success',
+					message: 'Priority Waitlist: ' + (i - 1)
+				};
+			}
+		}
+
+		let canSheet = ss.getSheetByName('Cancelled');
+		let canlLr = canSheet.getLastRow();
+
+		for (let i = 2; i <= canlLr; i++) {
+			if (
+				canSheet.getRange(i, searchColumn).getValue().toLowerCase() ===
+				e.data.toLowerCase()
+			) {
+				return {
+					status: 'success',
+					message: 'Cancelled'
+				};
+			}
+		}
+
 		let dataType = 'registration ID';
 		if (searchColumn === passEmailCol) {
 			dataType = 'email';

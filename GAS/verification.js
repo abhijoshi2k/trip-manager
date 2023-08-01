@@ -67,25 +67,47 @@ const verification = (e, ss) => {
 			}
 		}
 
-		const code = Math.floor(100000 + Math.random() * 900000);
-		const html = verificationHTML
-			.replace('{{name}}', reg_name)
-			.replace('{{code}}', code);
+		let pwlSheet = ss.getSheetByName('Priority Waitlist');
+		let pwlLr = pwlSheet.getLastRow();
 
-		const subject = 'Akkalkot registration';
-		const body = '';
-		const options = {
-			htmlBody: html,
-			name: 'Akkalkot trip'
-		};
-		if (MailApp.getRemainingDailyQuota() < 4) {
-			return {
-				status: 'error',
-				message: 'Daily registrations exceeded. Try again tomorrow.'
-			};
+		for (let i = 2; i <= pwlLr; i++) {
+			if (
+				pwlSheet.getRange(i, passEmailCol).getValue().toLowerCase() ===
+				passEmail.toLowerCase()
+			) {
+				return {
+					status: 'error',
+					message:
+						passEmail +
+						' already registered (Priority Waitlist: ' +
+						(i - 1) +
+						')'
+				};
+			}
 		}
 
-		GmailApp.sendEmail(email, subject, body, options);
+		const code = Math.floor(100000 + Math.random() * 900000);
+
+		if (!e.admin) {
+			const html = verificationHTML
+				.replace('{{name}}', reg_name)
+				.replace('{{code}}', code);
+
+			const subject = 'Akkalkot registration';
+			const body = '';
+			const options = {
+				htmlBody: html,
+				name: 'Akkalkot trip'
+			};
+			if (MailApp.getRemainingDailyQuota() < 4) {
+				return {
+					status: 'error',
+					message: 'Daily registrations exceeded. Try again tomorrow.'
+				};
+			}
+
+			GmailApp.sendEmail(email, subject, body, options);
+		}
 
 		return { status: 'success', code: code };
 	} catch (err) {

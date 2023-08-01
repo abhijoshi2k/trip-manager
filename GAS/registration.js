@@ -9,6 +9,18 @@ let validation = SpreadsheetApp.newDataValidation()
  */
 const registration = (e, ss) => {
 	try {
+		if (e.admin && e.adminPass !== masterPwd) {
+			return {
+				status: 'error',
+				message: 'Incorrect password!'
+			};
+		} else if (e.admin) {
+			let verificationStat = verification(e, ss);
+			if (verificationStat.status !== 'success') {
+				return verificationStat;
+			}
+		}
+
 		let sheet = ss.getSheetByName('Active');
 
 		let date = new Date();
@@ -39,7 +51,7 @@ const registration = (e, ss) => {
 			'No',
 			e.passEmail,
 			e.email,
-			'',
+			e.admin ? 'Admin registration' : '',
 			''
 		];
 
@@ -74,7 +86,12 @@ const registration = (e, ss) => {
 
 		let status = 'Confirmed';
 		if (reqR > maxActive + 1) {
-			let wlSheet = ss.getSheetByName('Waitlist');
+			let sheetName = 'Waitlist';
+			if (e.pwl) {
+				sheetName = 'Priority Waitlist';
+			}
+
+			let wlSheet = ss.getSheetByName(sheetName);
 			let range = sheet.getRange(reqR, 2, 1, 26);
 			let values = range.getValues();
 			values[0].unshift('');
@@ -82,7 +99,7 @@ const registration = (e, ss) => {
 			sheet.deleteRow(reqR);
 
 			let aplr = wlSheet.getLastRow();
-			status = 'Waitlist (' + (aplr - 1) + ')';
+			status = sheetName + ' (' + (aplr - 1) + ')';
 		}
 
 		let html = registrationHTML
