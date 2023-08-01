@@ -53,7 +53,8 @@ const registration = (e, ss) => {
 			let range = sheet.getRange('C' + i);
 			let val = range.getValue();
 			if (val === uuid) {
-				range.setValue(val + (i % 10));
+				uuid = val + (i % 10);
+				range.setValue(uuid);
 				// sheet.getRange('H2:H' + i).setDataValidation(validation);
 				sheet
 					.getRange(2, paymentCol, i - 1, 1)
