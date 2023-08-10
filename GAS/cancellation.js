@@ -96,11 +96,9 @@ const cancellation = (e, ss) => {
 				let cRegBy = sheet.getRange(i, registeredByCol).getValue();
 				let cPassEmail = sheet.getRange(i, passEmailCol).getValue();
 
-				let cLr = canSheet.getLastRow();
-
-				sheet
-					.getRange(i, 2, 1, 26)
-					.copyTo(canSheet.getRange(cLr + 1, 2));
+				let sheetArray = sheet.getRange(i, 2, 1, 26).getValues().flat();
+				sheetArray.unshift('');
+				canSheet.appendRow(sheetArray);
 
 				let wl = false;
 				let changeName = '';
@@ -221,11 +219,12 @@ const cancellation = (e, ss) => {
 				let cRegBy = wlSheet.getRange(i, registeredByCol).getValue();
 				let cPassEmail = wlSheet.getRange(i, passEmailCol).getValue();
 
-				let cLr = canSheet.getLastRow();
-
-				wlSheet
+				let sheetArray = wlSheet
 					.getRange(i, 2, 1, 26)
-					.copyTo(canSheet.getRange(cLr + 1, 2));
+					.getValues()
+					.flat();
+				sheetArray.unshift('');
+				canSheet.appendRow(sheetArray);
 
 				wlSheet.deleteRow(i);
 
@@ -267,11 +266,12 @@ const cancellation = (e, ss) => {
 						.getRange(i, passEmailCol)
 						.getValue();
 
-					let cLr = canSheet.getLastRow();
-
-					pwlSheet
+					let sheetArray = pwlSheet
 						.getRange(i, 2, 1, 26)
-						.copyTo(canSheet.getRange(cLr + 1, 2));
+						.getValues()
+						.flat();
+					sheetArray.unshift('');
+					canSheet.appendRow(sheetArray);
 
 					pwlSheet.deleteRow(i);
 

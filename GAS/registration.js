@@ -1,5 +1,13 @@
 let validation = SpreadsheetApp.newDataValidation()
-	.requireValueInList(['No', 'Yes', 'Partially Paid'])
+	.requireValueInList([
+		'No',
+		'Yes, RM Mistry',
+		'Yes, Dharmesh',
+		'Yes, Ajay',
+		'Yes, NVJ',
+		'Yes, DSP',
+		'Yes, Vivek'
+	])
 	.setAllowInvalid(false)
 	.build();
 
