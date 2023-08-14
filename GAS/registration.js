@@ -1,12 +1,14 @@
 let validation = SpreadsheetApp.newDataValidation()
 	.requireValueInList([
 		'No',
-		'Yes, RM Mistry',
-		'Yes, Dharmesh',
-		'Yes, Ajay',
-		'Yes, NVJ',
-		'Yes, DSP',
-		'Yes, Vivek'
+		'Recd, RM Mistry',
+		'Recd, Dharmesh',
+		'Recd, Ajay',
+		'Recd, NVJ',
+		'Recd, DSP',
+		'Recd, Vivek',
+		'Recd, Jignesh',
+		'Recd, Santosh'
 	])
 	.setAllowInvalid(false)
 	.build();
@@ -50,8 +52,8 @@ const registration = (e, ss) => {
 			'',
 			'',
 			e.age,
-			e.mobile,
-			e.emergency,
+			"'" + e.mobile,
+			"'" + e.emergency,
 			e.boarding,
 			e.alighting,
 			e.office_location,
