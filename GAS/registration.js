@@ -4,11 +4,11 @@ let validation = SpreadsheetApp.newDataValidation()
 		'Recd, RM Mistry',
 		'Recd, Dharmesh',
 		'Recd, Ajay',
-		'Recd, NVJ',
-		'Recd, DSP',
+		'Recd, Nilesh',
 		'Recd, Vivek',
 		'Recd, Jignesh',
-		'Recd, Santosh'
+		'Recd, Santosh',
+		'Recd, Dayanand'
 	])
 	.setAllowInvalid(false)
 	.build();
