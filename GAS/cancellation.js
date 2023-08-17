@@ -100,6 +100,8 @@ const cancellation = (e, ss) => {
 				sheetArray.unshift('');
 				canSheet.appendRow(sheetArray);
 
+				setPaymentValidation(canSheet, canSheet.getLastRow(), true);
+
 				let wl = false;
 				let changeName = '';
 				let changePassEmail = '';
@@ -163,6 +165,8 @@ const cancellation = (e, ss) => {
 				if (!wl) {
 					sheet.deleteRow(i);
 				} else {
+					setPaymentValidation(sheet, lr);
+
 					let body = statusChangeHTML
 						.replace('{{name}}', changeName)
 						.replace('{{passEmail}}', changePassEmail)
@@ -225,6 +229,7 @@ const cancellation = (e, ss) => {
 					.flat();
 				sheetArray.unshift('');
 				canSheet.appendRow(sheetArray);
+				setPaymentValidation(canSheet, canSheet.getLastRow(), true);
 
 				wlSheet.deleteRow(i);
 
@@ -272,6 +277,7 @@ const cancellation = (e, ss) => {
 						.flat();
 					sheetArray.unshift('');
 					canSheet.appendRow(sheetArray);
+					setPaymentValidation(canSheet, canSheet.getLastRow(), true);
 
 					pwlSheet.deleteRow(i);
 

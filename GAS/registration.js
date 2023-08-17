@@ -1,18 +1,3 @@
-let validation = SpreadsheetApp.newDataValidation()
-	.requireValueInList([
-		'No',
-		'Recd, RM Mistry',
-		'Recd, Dharmesh',
-		'Recd, Ajay',
-		'Recd, Nilesh',
-		'Recd, Vivek',
-		'Recd, Jignesh',
-		'Recd, Santosh',
-		'Recd, Dayanand'
-	])
-	.setAllowInvalid(false)
-	.build();
-
 /**
  * @param {Object} e - Event object
  * @param {GoogleAppsScript.Spreadsheet.Spreadsheet} ss - Spreadsheet object
@@ -77,10 +62,9 @@ const registration = (e, ss) => {
 			if (val === uuid) {
 				uuid = val + (i % 10);
 				range.setValue(uuid);
-				// sheet.getRange('H2:H' + i).setDataValidation(validation);
-				sheet
-					.getRange(2, paymentCol, i - 1, 1)
-					.setDataValidation(validation);
+
+				setPaymentValidation(sheet, lr);
+
 				found = true;
 				reqR = i;
 				break;
@@ -109,6 +93,7 @@ const registration = (e, ss) => {
 			sheet.deleteRow(reqR);
 
 			let aplr = wlSheet.getLastRow();
+			setPaymentValidation(wlSheet, aplr);
 			status = sheetName + ' (' + (aplr - 1) + ')';
 		}
 
