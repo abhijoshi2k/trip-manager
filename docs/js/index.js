@@ -1,2 +1,2 @@
 let scLink =
-	'https://script.google.com/macros/s/AKfycbw48TnNfsyRtpXnF4FgI9WAdbgWFUbDesVG_c6UoMQiwq31YeLep5U-TxpbKU5XRlgA/exec';
+	'https://script.google.com/macros/s/AKfycbwpgyAD7w0ugMLZ24ktbXiTxCm5aUJlTnoaC-0DpBjnGRls8baphrQ7NybbCXM6z4sC/exec';
