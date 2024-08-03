@@ -587,6 +587,8 @@
 			let boarding = document.getElementById('boarding');
 			let alighting = document.getElementById('alighting');
 			let office_location = document.getElementById('office_location');
+			let emergency = document.getElementById('emergency');
+			let mobile = document.getElementById('mobile');
 
 			const requestVerificationCode = () => {
 				// boarding/alighting/office must have a value
@@ -601,6 +603,10 @@
 				} else if (office_location.value == 'null') {
 					alert('Please select office location');
 					office_location.focus();
+					return;
+				} else if (emergency.value == mobile.value) {
+					alert('Emergency number cannot be same as mobile number');
+					emergency.focus();
 					return;
 				}
 
