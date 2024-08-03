@@ -308,14 +308,68 @@
 											passenger
 											<span class="text-danger">*</span>
 										</label>
-										<input
-											type="text"
-											class="form-control"
+										<select
+											class="form-select"
 											id="office_location"
 											name="office_location"
-											placeholder="Enter your office location"
 											required
-										/>
+										>
+											<option
+												value="null"
+												id="office_location-select"
+											>
+												Select
+											</option>
+											<option value="Worley (NEH)">
+												Worley (NEH)
+											</option>
+											<option value="Worley (Gigaplex)">
+												Worley (Gigaplex)
+											</option>
+											<option value="JACOBS">
+												JACOBS
+											</option>
+											<option value="Tecnimont (Malad)">
+												Tecnimont (Malad)
+											</option>
+											<option
+												value="Tecnimont (Gigaplex)"
+											>
+												Tecnimont (Gigaplex)
+											</option>
+											<option value="Toyo">Toyo</option>
+											<option value="GS Engg.">
+												GS Engg.
+											</option>
+											<option value="Burns & Mcdonell">
+												Burns & Mcdonell
+											</option>
+											<option value="B & V">B & V</option>
+											<option value="AirProduct">
+												AirProduct
+											</option>
+											<option value="Thyssenkrup">
+												Thyssenkrup
+											</option>
+											<option value="NPCC">NPCC</option>
+											<option value="KENT">KENT</option>
+											<option value="TPL">TPL</option>
+											<option value="RIL">RIL</option>
+											<option value="Flour">Flour</option>
+											<option value="Cyient">
+												Cyient
+											</option>
+											<option value="TCE">TCE</option>
+											<option value="Technip">
+												Technip
+											</option>
+											<option value="L & T">L & T</option>
+											<option
+												value="Others - Retired, Relative, etc"
+											>
+												Others - Retired, Relative, etc
+											</option>
+										</select>
 									</div>
 								</div>
 
@@ -530,15 +584,23 @@
 				}
 			};
 
+			let boarding = document.getElementById('boarding');
+			let alighting = document.getElementById('alighting');
+			let office_location = document.getElementById('office_location');
+
 			const requestVerificationCode = () => {
-				// boarding/alighting must have a value
-				if (document.getElementById('boarding').value == 'null') {
+				// boarding/alighting/office must have a value
+				if (boarding.value == 'null') {
 					alert('Please select boarding station');
+					boarding.focus();
 					return;
-				} else if (
-					document.getElementById('alighting').value == 'null'
-				) {
+				} else if (alighting.value == 'null') {
 					alert('Please select alighting station');
+					alighting.focus();
+					return;
+				} else if (office_location.value == 'null') {
+					alert('Please select office location');
+					office_location.focus();
 					return;
 				}
 
