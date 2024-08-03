@@ -53,7 +53,10 @@
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2">
 					<h1>Registration</h1>
-					<h4 class="mb-4">Akkalkot-Solapur-Tuljapur Trip - 2024</h4>
+					<h4 class="mb-2">Akkalkot-Solapur-Tuljapur Trip</h4>
+					<h6 class="mb-4 text-danger text-decoration-underline">
+						29<sup>th</sup> Nov to 1<sup>st</sup> Dec 2024
+					</h6>
 					<h6>Only those working at Worley can self-register</h6>
 					<small>
 						Others can register <b>only</b> through their friends in
@@ -104,7 +107,7 @@
 
 							<div class="mb-3">
 								<label for="email" class="form-label">
-									Your email address (ending with @worley.com)
+									Email address (ending with @worley.com)
 									<span class="text-danger">*</span>
 								</label>
 								<input
@@ -173,14 +176,24 @@
 									<div class="mb-3">
 										<label for="mobile" class="form-label">
 											Mobile number of passenger
+											<br />
+											<small
+												class="text-secondary-emphasis"
+												>(Only 10 digits
+												<b>without</b> space OR country
+												code)</small
+											>
 											<span class="text-danger">*</span>
 										</label>
 										<input
-											type="tel"
+											type="text"
 											class="form-control"
 											id="mobile"
 											name="mobile"
 											placeholder="Enter your mobile number"
+											max="10"
+											min="10"
+											pattern="[0-9]{10}"
 											required
 										/>
 									</div>
@@ -193,6 +206,13 @@
 										>
 											Emergency contact number of
 											passenger
+											<br />
+											<small
+												class="text-secondary-emphasis"
+												>(Only 10 digits
+												<b>without</b> space OR country
+												code)</small
+											>
 											<span class="text-danger">*</span>
 										</label>
 										<input
@@ -201,6 +221,9 @@
 											id="emergency"
 											name="emergency"
 											placeholder="Emergency contact number"
+											max="10"
+											min="10"
+											pattern="[0-9]{10}"
 											required
 										/>
 									</div>
@@ -430,7 +453,7 @@
 		<script>
 			const ignoreWorley = true;
 			if (
-				!location.href.includes('abhijoshi2k.github.io') &&
+				!location.href.includes('gurukrupadarshansahal.online') &&
 				ignoreWorley
 			) {
 				let temp = document.getElementById('email');
