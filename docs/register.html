@@ -458,6 +458,7 @@
 								class="form-control"
 								id="ver-code"
 								placeholder="6 digit"
+								autocomplete="off"
 								required
 							/>
 						</div>
@@ -632,11 +633,15 @@
 					'text-danger'
 				);
 
-				let email = document.getElementById('email').value.trim();
+				let email = document
+					.getElementById('email')
+					.value.trim()
+					.toLowerCase();
 				let name = document.getElementById('name').value.trim();
 				let passEmail = document
 					.getElementById('pass_email')
-					.value.trim();
+					.value.trim()
+					.toLowerCase();
 
 				let data = {
 					email: email,
