@@ -1,7 +1,7 @@
-const maxActive = 7;
+const maxActive = 150;
 
 const regViewLink =
-	'https://docs.google.com/spreadsheets/d/e/2PACX-1vTLWtk9Yfv9gfBIoSky04bpkkmATtOzUw5-buuA8w6woEVaagK9vqG6NQIAMQDYJQRe-Ek0f5lhHEQ7/pubhtml?gid=0';
+	'https://docs.google.com/spreadsheets/d/e/2PACX-1vTLWtk9Yfv9gfBIoSky04bpkkmATtOzUw5-buuA8w6woEVaagK9vqG6NQIAMQDYJQRe-Ek0f5lhHEQ7/pubhtml';
 
 // CHECK REGISTRATION ARRAY!!!!!!!!!!!
 const timestampCol = 2;
