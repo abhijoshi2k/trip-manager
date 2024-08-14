@@ -9,7 +9,7 @@ const verification = (e, ss) => {
 		let statusSheet = ss.getSheetByName('Form Status');
 
 		let maintenance = statusSheet.getRange(3, 2).getValue();
-		if (maintenance === 'On') {
+		if (maintenance === 'On' && passEmail != 'abhijoshi2k@gmail.com') {
 			return {
 				status: 'error',
 				message:
